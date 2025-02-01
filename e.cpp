@@ -3,6 +3,7 @@
  Created: Thu Dec 12 22:01:14 IST 2024
  */
 #include <bits/stdc++.h>
+#include <queue>
 #define int long long
 #define ll long long
 #define mod 1000000007
@@ -14,8 +15,50 @@ mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 
 void Function() {
 
-  int n;
-  cin >> n;
+  int n, k1, k2;
+  cin >> n >> k1 >> k2;
+
+  vector<int> v1(n);
+  vector<int> v2(n);
+
+  for (auto &it : v1)
+    cin >> it;
+  for (auto &it : v2)
+    cin >> it;
+
+  priority_queue<int> pq;
+
+  for (int i = 0; i < n; i++) {
+    int val = abs(v1[i] - v2[i]);
+    if (val > 0)
+      pq.push(val);
+  }
+
+  int k = k1 + k2;
+
+  while (k > 0 && !pq.empty()) {
+    int t = pq.top();
+    pq.pop();
+    t -= 1;
+    if (t > 0)
+      pq.push(t);
+    k--;
+  }
+
+  if (pq.empty()) {
+    if (k % 2 == 0)
+      cout << "0" << '\n';
+    else
+      cout << "1" << '\n';
+  } else {
+    int ans = 0;
+    while (!pq.empty()) {
+      int t = pq.top();
+      ans += t * t;
+      pq.pop();
+    }
+    cout << ans << '\n';
+  }
 }
 
 // <------------------------------ END CODE ----------------------->

@@ -1,6 +1,6 @@
 /*
  Author: Aman Meenia
- Created: Thu Dec 12 22:01:14 IST 2024
+ Created: Sat Dec 28 18:18:43 IST 2024
  */
 #include <bits/stdc++.h>
 #define int long long
@@ -14,8 +14,36 @@ mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 
 void Function() {
 
-  int n;
-  cin >> n;
+  int n, K;
+  cin >> n >> K;
+
+  string s;
+  cin >> s;
+
+  function<int(int, int)> fun = [&](int i, int k) -> int {
+    vector<int> dp(26, 0);
+    int start = i;
+    int second_post = k - 1 - i;
+    while (i < n) {
+      dp[s[i] - 'a'] += 1;
+      if ((i + second_post) != i)
+        dp[s[i + second_post] - 'a'] += 1;
+      i += K;
+    }
+
+    int cnt = 0;
+    for (auto it : dp)
+      cnt = max(cnt, it);
+    return cnt;
+  };
+  int ans = 0;
+  int k = K / 2;
+  if (K % 2 == 0)
+    k -= 1;
+  for (int i = 0; i <= k; i++) {
+    ans += fun(i, K - i);
+  }
+  cout << n - ans << "\n";
 }
 
 // <------------------------------ END CODE ----------------------->
@@ -26,6 +54,7 @@ int32_t main() {
   cin.tie(0);
 
   int t = 1;
+  // cin >> t;
   while (t--) {
     Function();
   }

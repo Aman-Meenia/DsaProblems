@@ -1,6 +1,6 @@
 /*
  Author: Aman Meenia
- Created: Thu Dec 12 22:01:14 IST 2024
+ Created: Fri Jan 31 22:18:03 IST 2025
  */
 #include <bits/stdc++.h>
 #define int long long
@@ -16,6 +16,20 @@ void Function() {
 
   int n;
   cin >> n;
+
+  priority_queue<pair<int, int>, vector<pair<int, int>>,
+                 greater<pair<int, int>>>
+      pq;
+  pq.push({1, 2});
+  pq.push({1, 1});
+  pq.push({1, 4});
+  pq.push({0, -1});
+  pq.push({12, 12});
+
+  while (!pq.empty()) {
+    cout << pq.top().first << " $ " << pq.top().second << endl;
+    pq.pop();
+  }
 }
 
 // <------------------------------ END CODE ----------------------->

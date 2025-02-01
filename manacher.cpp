@@ -1,137 +1,133 @@
-#include<bits/stdc++.h>
+/*
+ Author: Aman Meenia
+ Created: Wed Sep 11 10:34:32 IST 2024
+ */
+// #include <bits/stdc++.h>
+#include <iostream>
 #define ll long long
 #define mod 1000000007
 using namespace std;
 
+class manachers {
+public:
+  string generateString(string &s) {
+    cout << " S " << s << endl;
+    int n = s.size();
+    string ans;
 
+    ans.push_back('#');
+    for (auto it : s) {
+      ans.push_back(it);
 
-string  buildString(string & s ){
+      ans.push_back('#');
+    }
+    cout << " Ans " << ans << endl;
+    return ans;
+  }
 
-int n = s.size();
-string t;
-for(int i=0; i<n; i++){
-t.push_back('#');
-t.push_back(s[i]);
-}
-t.push_back('#');
-// cout<<t<<endl;
-    return t;
-}
+  vector<int> dp;
+  void manachersAlgorithm(string &s) {
 
+    int n = s.size();
 
-vector<int> p;
+    dp.assign(n, 1);
 
-void manacher(string & s){
-int n = s.size();
-p.assign(n,1);
-int l =1;
-int r=1;
+    int l = 0;
+    int r = 0;
 
-for(int i=1; i<n; i++){
-
-cout<<" i "<<i<<" l "<<l <<" r "<<r<<endl;
-    p[i]=max(0,min(r-i,p[l+r-i]));
-
-    while(i+p[i]<n && i-p[i]>=0 && s[i+p[i]]==s[i-p[i]]){
-        p[i]++;
+    for (int i = 1; i < n; i++) {
+      int t = l + r - i;
+      t = max(t, 0);
+      dp[i] = max(0, min(r - i, dp[t]));
+      while (i + dp[i] < n && i - dp[i] >= 0 && s[i + dp[i]] == s[i - dp[i]]) {
+        dp[i]++;
+      }
+      if (i + dp[i] > r) {
+        r = i + dp[i];
+        l = i - dp[i];
+      }
     }
 
-    if(i+p[i]>r){
-        l=i-p[i];
-        r=i+p[i];
+    for (auto it : dp)
+      cout << it << " ";
+    cout << endl;
+  }
+
+  bool isPalindromeLtoR(int l, int r) {
+
+    int mid = (l + r) / 2;
+    int cnt = r - l + 1;
+    // it means same partiy and size of the subarray is odd
+    if (l % 2 == r % 2) {
+      int index = mid * 2 + 1;
+      if (dp[index] >= cnt)
+        return true;
+    } else {
+      int index = mid * 2 + 1;
+      index += 1;
+      if (dp[index] >= cnt)
+        return true;
     }
+    cout << " FALSE " << endl;
+    return false;
+  }
+};
 
+class Solution {
+public:
+  int minCut(string &s) {
+
+    int ans = 0;
+    int n = s.size();
+    vector<int> dp(n + 1, 0);
+    dp[0] = 1;
+
+    manachers *m = new manachers();
+
+    string t = m->generateString(s);
+    m->manachersAlgorithm(t);
+
+    if (m->isPalindromeLtoR(0, n - 1)) {
+      cout << " True " << endl;
+      return 0;
+    }
+    for (int i = 1; i < n; i++) {
+      dp[i] = 1 + dp[i - 1];
+      if (m->isPalindromeLtoR(0, i))
+        dp[i] = 1;
+      for (int j = 1; j <= i; j++) {
+        if (m->isPalindromeLtoR(j, i)) {
+          for (int tt = j; tt <= i; tt++)
+            cout << s[tt];
+          cout << endl;
+          dp[i] = min(dp[i], dp[j - 1] + 1);
+        }
+      }
+    }
+    cout << " Dp array " << endl;
+    for (auto it : dp)
+      cout << it << " ";
+    cout << endl;
+
+    return dp[n - 1] - 1;
+  }
+} m;
+
+void Function() {
+
+  string s;
+  cin >> s;
+
+  Solution *S = new Solution();
+  int Ans = S->minCut(s);
+  cout << " Ans " << Ans << endl;
 }
 
+int main() {
 
-for(auto it:s){
-    cout<<it<<" ";
-}cout<<endl;
+  int t = 1;
 
-for(auto it:p){
-    cout<<it<<" ";
-}cout<<endl;
-
-
-
-
-
-}
-
-
-int main(){
-#ifndef ONLINE_JUDGE
-    // for getting input
-    freopen("input1.txt","r",stdin);
-    // for writing output
-    freopen("output1.txt","w",stdout);
-#endif
-
-
-string s;
-cin >>s;
-
-s = buildString(s);
-manacher(s);
-
-int cnt = 0;
-
-int index = -1;
-for(int i=0; i<p.size(); i++){
-    if(p[i]>cnt){
-    cnt = max(cnt,p[i]);
-    index = i;
-}
-}
-
-// cout<<index<<endl;
-
-// string ans;
-
-// if(s[index]=='#'){
-// int left=index;
-// int right=index;
-
-// while(ans.size()<cnt/2){
-//     left--;
-//     ans.push_back(s[left]);
-//     left--;
-
-// }
-// string temp = ans;
-// reverse(temp.begin(),temp.end());
-// cout<<temp+ans<<endl;
-
-
-
-
-// }else{
-
-
-//     int left = index;
-
-//     while(ans.size()<cnt/2){
-// ans.push_back(s[left]);
-// left-=2;
-//     }
-// string t = ans;
-// reverse(t.begin(),t.end());
-// t.pop_back();
-// cout<<t+ans<<endl;
-
-
-
-
-// }
-
-
-
-
-// cout<<cnt-1<<endl;
-
-
-
-
-
-
+  while (t--) {
+    Function();
+  }
 }

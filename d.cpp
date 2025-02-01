@@ -12,10 +12,29 @@ mt19937_64 RNG(chrono::steady_clock::now().time_since_epoch().count());
 
 // <------------------------------ START CODE --------------------->
 
-void Function() {
+const int N = 100001;
 
+void Function() {
   int n;
   cin >> n;
+  vector<int> v(N, 0);
+  for (int i = 0; i < n; i++) {
+    int val;
+    cin >> val;
+    v[val] += val;
+  }
+
+  vector<int> dp(N);
+  dp[0] = 0;
+  dp[1] = v[1];
+  int ans = 0;
+  for (int i = 2; i < N; i++) {
+    dp[i] = v[i] + dp[i - 2];
+    dp[i] = max(dp[i], dp[i - 1]);
+    ans = max(ans, dp[i]);
+  }
+
+  cout << ans << '\n';
 }
 
 // <------------------------------ END CODE ----------------------->

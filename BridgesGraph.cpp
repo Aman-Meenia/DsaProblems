@@ -1,87 +1,75 @@
 /*
  Author: Aman Meenia
- Created:
+ Created: Mon Sep 30 10:10:51 IST 2024
  */
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
+#include <ctime>
 #define ll long long
 #define mod 1000000007
 using namespace std;
 
+#define N 100010
 
+int Low[N];
+int Time[N];
+vector<vector<int>> ans;
+void criticalBridges(vector<int> adj[], int root, int parent, vector<int> &vis,
+                     int time) {
 
-int Time[1000000];
-int low[1000000];
-vector<vector<int> > ans;
-void criticalBridges(vector<int> adj[] , int root , vector<int> & vis , int cnt , int parent) {
+  vis[root] = 1;
+  Low[root] = time;
+  Time[root] = time;
 
-	vis[root] = 1;
-	cnt += 1;
+  for (auto it : adj[root]) {
 
-	Time[root] = cnt;
-	low[root] = cnt;
-	for (auto it : adj[root]) {
+    if (it == parent)
+      continue;
 
-		if (it == parent) continue;
-		if (vis[it] == 0) {
+    if (vis[it] == 0) {
 
-			criticalBridges(adj, it, vis, cnt, root);
-			low[root] = min(low[root], low[it]);
-			// when not able to reach
-			if (low[it] > Time[root]) {
-				ans.push_back({root, it});
-			}
-		} else {
+      criticalBridges(adj, it, root, vis, time + 1);
+      Low[root] = min(Low[root], Low[it]);
+      if (Low[it] > Time[root]) {
+        ans.push_back({root, it});
+      }
 
-// if already visited choose low as min of low ,
-			low[root] = min(low[root], low[it]);
-
-		}
-
-
-
-
-	}
-
-
+    } else {
+      Low[root] = min(Low[root], Low[it]);
+    }
+  }
 }
 
-
 void Function() {
+  int n;
+  cin >> n;
+  vector<int> adj[n + 1];
+  int m;
+  cin >> m;
 
-	int n ;
-	cin >> n;
+  for (int i = 0; i < n; i++) {
+    int a, b;
+    cin >> a >> b;
+    adj[a].push_back(b);
+  }
+  vector<int> vis(n + 1, 0);
 
-	vector<int> adj[n];
+  criticalBridges(adj, 0, -1, vis, 1);
 
-	for (int  i = 0; i < n; i++) {
-		int a , b;
-		cin >> a >> b;
-		adj[a].push_back(b);
-		adj[b].push_back(a);
-
-	}
-
-
-	vector<int> vis(n, 0);
-	criticalBridges(adj, 0, vis, 0, -1);
-
-	for (auto it : ans) cout << it[0] << " " << it[1] << endl;
-
+  cout << "ANs.size() " << ans.size() << endl;
+  for (auto it : ans) {
+    for (auto a : it) {
+      cout << a << " ";
+    }
+    cout << endl;
+  }
 }
 
 int main() {
-#ifndef ONLINE_JUDGE
-	// for getting input
-	freopen("input1.txt", "r", stdin);
-	// for writing output
-	freopen("output1.txt", "w", stdout);
-#endif
 
-	int t = 1;
-// cin >>t;
+  int t = 1;
 
-	while (t--) {
-		Function();
-	}
-
+  while (t--) {
+    Function();
+  }
 }
+

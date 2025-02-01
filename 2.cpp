@@ -2,69 +2,42 @@
  Author: Aman Meenia
  Created:
  */
-#include<bits/stdc++.h>
-#define ll long long
-#define mod 1000000007
+#include <filesystem> // Required for filesystem in C++17
+#include <iostream>
+#include <string>
+
 using namespace std;
+namespace fs = std::filesystem; // Alias for std::filesystem
 
+// Function to find the longest palindrome and also print files
+string longestPalindrome(string s) {
+  // Print files in the current directory
+  string path = "/Users/aman"; // Current directory
+  cout << "Files in current directory: " << endl;
+  for (const auto &entry :
+       fs::directory_iterator(path)) { // Use 'fs' here for filesystem
+    cout << entry.path().filename().string() << endl; // Print filenames
+  }
+  std::cout << "Current directory: " << fs::current_path() << std::endl;
 
-void minOperations(string & s) {
-	int n = s.size();
+  // Move to the parent directory
+  fs::path parentPath = fs::current_path().parent_path();
+  fs::current_path(parentPath);
 
-	int cnt = 0;
-	char pre = s[0];
-	int operation = 0;
-	for (int i = 0; i < n; i++) {
+  // Print the new current directory
+  std::cout << "Moved to parent directory: " << fs::current_path() << std::endl;
 
-
-		if (pre == s[i]) {
-			cnt++;
-		} else {
-			if (cnt >= 2) {
-				operation += (cnt - 1);
-			}
-			pre = s[i];
-			cnt = 1;
-		}
-	}
-	if (cnt >= 2) {
-		operation += (cnt - 1);
-
-	}
-
-
-	operation += 1;
-
-	cout << operation / 2 << endl;
-
-
-}
-
-
-void Function() {
-
-	string s;
-	cin >> s;
-
-
-	minOperations(s);
-
-
+  // Placeholder palindrome logic (you'll replace this with actual logic)
+  return "bab";
 }
 
 int main() {
-#ifndef ONLINE_JUDGE
-	// for getting input
-	freopen("input1.txt", "r", stdin);
-	// for writing output
-	freopen("output1.txt", "w", stdout);
-#endif
+  string s;
+  cout << "Enter a string: ";
+  cin >> s;
 
-	int t = 1;
-// cin >>t;
+  string ans = longestPalindrome(s);
+  cout << "Longest palindrome: " << ans << endl;
 
-	while (t--) {
-		Function();
-	}
-
+  return 0;
 }
